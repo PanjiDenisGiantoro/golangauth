@@ -1,8 +1,10 @@
 package main
 
 import (
+	"auth2/auth"
 	"auth2/handler"
 	"auth2/user"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -20,7 +22,10 @@ func main() {
 	userService := user.Newservice(userRepository)
 	userService.SaveAvatar(50, "images/1.jpg")
 
-	userHandler := handler.NewUserHandler(userService)
+	authService := auth.NewService()
+
+	fmt.Println(authService.GenerateToken(1001))
+	userHandler := handler.NewUserHandler(userService, authService)
 	router := gin.Default()
 
 	api := router.Group("/api/v1")
@@ -28,6 +33,6 @@ func main() {
 	api.POST("/sessions", userHandler.Login)
 	api.POST("/email_checkers", userHandler.CheckEmailAvailability)
 	api.POST("/avatars", userHandler.UploadAvatar)
-	router.Run(":8093")
+	router.Run(":8094")
 
 }
