@@ -2,6 +2,7 @@ package main
 
 import (
 	"auth2/auth"
+	"auth2/campaign"
 	"auth2/handler"
 	"auth2/helper"
 	"auth2/user"
@@ -23,23 +24,21 @@ func main() {
 		log.Fatal(err.Error())
 	}
 	userRepository := user.NewRepository(db)
+	campaignRepository := campaign.NewRepository(db)
+
+	campaigns, err := campaignRepository.FindByUserID(69)
+
+	fmt.Println("debug")
+	for _, campaign := range campaigns {
+		fmt.Println(campaign.Name)
+		if len(campaign.CampaignImages) > 0 {
+			fmt.Println(len(campaign.CampaignImages))
+			fmt.Println(campaign.CampaignImages[0].FileName)
+		}
+
+	}
 	userService := user.Newservice(userRepository)
-	userService.SaveAvatar(50, "images/1.jpg")
-
 	authService := auth.NewService()
-
-	token, err := authService.ValidateToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo2OH0.nqY191hhXPzmPUf33R3-fDBTXmE25AllijLDoCxERSM")
-
-	if err != nil {
-		fmt.Println("ERROR")
-		fmt.Println(err.Error())
-	}
-	if token.Valid {
-		fmt.Println("VALID")
-	} else {
-		fmt.Println("INVALID")
-	}
-	fmt.Println(authService.GenerateToken(1001))
 	userHandler := handler.NewUserHandler(userService, authService)
 	router := gin.Default()
 
@@ -48,7 +47,7 @@ func main() {
 	api.POST("/sessions", userHandler.Login)
 	api.POST("/email_checkers", userHandler.CheckEmailAvailability)
 	api.POST("/avatars", authMiddleware(authService, userService), userHandler.UploadAvatar)
-	router.Run(":8094")
+	router.Run(":8001")
 
 }
 
