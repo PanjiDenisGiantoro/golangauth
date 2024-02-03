@@ -16,7 +16,8 @@ type Campaign struct {
 	CreatedAt        string
 	UpdatedAt        string
 	CampaignImages   []CampaignImage
-	User             user.User
+
+	User user.User
 }
 
 type CampaignImage struct {
