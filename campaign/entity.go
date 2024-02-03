@@ -1,5 +1,7 @@
 package campaign
 
+import "auth2/user"
+
 type Campaign struct {
 	ID               int
 	UserID           int
@@ -14,6 +16,7 @@ type Campaign struct {
 	CreatedAt        string
 	UpdatedAt        string
 	CampaignImages   []CampaignImage
+	User             user.User
 }
 
 type CampaignImage struct {
