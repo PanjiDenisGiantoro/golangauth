@@ -17,3 +17,9 @@ type CreateCampaignInput struct {
 	UpdatedAt        string `json:"updated_at"`
 	User             user.User
 }
+
+type CreateCampaignImageInput struct {
+	CampaignID int `form:"campaign_id" binding:"required"`
+	IsPrimary  int `form:"is_primary" `
+	User       user.User
+}

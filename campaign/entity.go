@@ -28,3 +28,11 @@ type CampaignImage struct {
 	CreatedAt  string
 	UpdatedAt  string
 }
+type CampaignImages struct {
+	ID         int
+	CampaignID int
+	FileName   string
+	IsPrimary  int
+	CreatedAt  string
+	UpdatedAt  string
+}
